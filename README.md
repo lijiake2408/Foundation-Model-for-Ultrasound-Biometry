@@ -1,4 +1,4 @@
-# Foundation Model Challenge for Ultrasound Image Analysis (FMC_UIA) - Baseline Code
+# Generalization-oriented Ultrasound Biometry - Baseline Code
 Welcome to the Foundation Model Challenge for Ultrasound Image Analysis (FMC_UIA)! This repository provides baseline code to help you quickly get started with training, inference, and submission.
 
 Get the train dataset through the following channels:
@@ -31,12 +31,7 @@ New Dataset Task Released – Update Your Training Pipeline
 
 This challenge includes **4 types of medical image analysis tasks** with a total of **27 subtasks**:
 
-| Task Type | Count | Description | Output Format |
-|-----------|-------|-------------|---------------|
-| **Segmentation** | 12 | Pixel-level classification | Image |
-| **Classification** | 9 | Image classification | JSON file |
-| **Detection** | 3 | Object localization | JSON file |
-| **Regression** | 3 | Keypoint localization | JSON file |
+| **Regression** | 27 | Keypoint localization | JSON file |
 
 ---
 
@@ -55,20 +50,10 @@ data/
 │   │   ├── task1.csv
 │   │   ├── task2.csv
 │   │   └── ...
-│   ├── Classification/         # Classification task images
-│   ├── Segmentation/          # Segmentation task images and masks
-│   │   ├── Two/               # 2-class segmentation
-│   │   ├── Three/             # 3-class segmentation
-│   │   ├── Four/              # 4-class segmentation
-│   │   └── Five/              # 5-class segmentation
-│   ├── Detection/             # Detection task images
 │   └── Regression/            # Regression task images
 │
 └── val/                       # Validation set (same structure as above)
     ├── csv_files/
-    ├── Classification/
-    ├── Segmentation/
-    ├── Detection/
     └── Regression/
 ```
 
@@ -166,15 +151,8 @@ python model.py
 
 ```
 predictions/
-├── classification_predictions.json     # Classification results
-├── detection_predictions.json          # Detection results
-├── regression_predictions.json         # Regression results
-└── Segmentation/                       # Segmentation results
-    ├── Two/
-    │   └── (Keep original directory structure)
-    ├── Three/
-    ├── Four/
-    └── Five/
+── regression_predictions.json         # Regression results
+   
 ```
 **Segmentation result path**: Must maintain the same relative path as the `mask_path` field in CSV
 
@@ -313,74 +291,7 @@ class Model:
 
 #### Output Format Requirements 🔴 Important!
 
-##### 1) Segmentation Task Output
-
-**Format**: Image file
-
-**Path**: Must maintain the same relative path as the `mask_path` field in CSV
-
-Example:
-```
-mask_path in CSV: ../Segmentation/Two/dataset_name/MASKS/mask_001.png
-
-Output path: {output_dir}/Segmentation/Two/dataset_name/MASKS/mask_001.png
-```
-
-**Pixel values**: 
-- Background: 0
-- Class 1: 1
-- Class 2: 2
-- ...
-
-##### 2) Classification Task Output
-
-**Format**: JSON file
-
-**Path**: `{output_dir}/classification_predictions.json`
-
-**Content**:
-```json
-[
-  {
-    "image_path": "relative/path/image_001.jpg",
-    "task_id": "breast_2cls",
-    "predicted_class": 1,
-    "predicted_probs": [0.15, 0.85]
-  },
-  ...
-]
-```
-
-**Description**:
-- `predicted_class`: Predicted class label (integer)
-- `predicted_probs`: Prediction probabilities for each class (array, length equals number of classes)
-  - Used to calculate evaluation metrics that require probabilities like AUC
-  - Sum of all probability values should be 1.0
-
-##### 3) Detection Task Output
-
-**Format**: JSON file
-
-**Path**: `{output_dir}/detection_predictions.json`
-
-**Content**:
-```json
-[
-  {
-    "image_path": "relative/path/image_001.jpg",
-    "task_id": "thyroid_nodule_det",
-    "bbox_normalized": [0.1, 0.2, 0.5, 0.6],
-    "bbox_pixels": [50, 100, 250, 300]
-  },
-  ...
-]
-```
-
-**Description**:
-- `bbox_normalized`: [x_min, y_min, x_max, y_max], normalized to [0, 1]
-- `bbox_pixels`: [x_min, y_min, x_max, y_max], pixel coordinates
-
-##### 4) Regression Task Output
+##### 1) Regression Task Output
 
 **Format**: JSON file
 
