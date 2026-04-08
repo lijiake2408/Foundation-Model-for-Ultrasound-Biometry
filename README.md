@@ -1,4 +1,4 @@
-# Generalization-oriented Ultrasound Biometry - Baseline Code
+# Foundation Model for Ultrasound Biometry - Baseline Code
 Welcome to the Foundation Model Challenge for Ultrasound Image Analysis (FMC_UIA)! This repository provides baseline code to help you quickly get started with training, inference, and submission.
 
 Get the train dataset through the following channels:
