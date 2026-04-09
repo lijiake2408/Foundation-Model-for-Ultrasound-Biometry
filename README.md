@@ -66,9 +66,9 @@ This challenge addresses **Landmark Detection for Ultrasound Parameter Measureme
 
 ### 1. Clone the Code
 
-```bash
-git clone https://github.com/your-repo/GU_Biometry.git
-cd GU_Biometry
+```
+https://github.com/lijiake2408/Foundation-Model-for-Ultrasound-Biometry
+
 ```
 
 ### 2. Prepare Data
@@ -85,10 +85,6 @@ data/
 │   ├── images/
 │   ├── landmarks/
 │   └── csv_files/
-│
-└── test/                       # Test set (5,000 images, hidden)
-    ├── images/
-    └── csv_files/
 ```
 
 ### 3. Train Model
@@ -120,14 +116,6 @@ baseline/
 ├── dataset.py                  # Dataset loader
 ├── utils.py                    # Utility functions
 ├── best_model.pth             # Trained model weights
-├── docker/                    # Docker submission related
-│   ├── Dockerfile
-│   ├── model.py              # Docker version of inference code
-│   ├── model_factory.py
-│   ├── requirements.txt
-│   ├── build.sh              # Build script
-│   ├── run_test.sh           # Test script
-│   └── README.md             # Docker detailed documentation
 └── README.md                  # This file
 ```
 
@@ -145,7 +133,7 @@ python train.py
 
 ```python
 LEARNING_RATE = 1e-4
-BATCH_SIZE = 8
+BATCH_SIZE = 4
 NUM_EPOCHS = 50
 DATA_ROOT_PATH = '/path/to/train'
 MODEL_SAVE_PATH = 'best_model.pth'
@@ -176,7 +164,7 @@ Modify the paths in `model.py`:
 if __name__ == '__main__':
     data_root = '/path/to/your/data'  # Change to your data path
     output_dir = 'predictions/'
-    batch_size = 8
+    batch_size = 4
     
     model = Model()
     model.predict(data_root, output_dir, batch_size=batch_size)
@@ -192,8 +180,7 @@ python model.py
 
 ```
 predictions/
-├── landmark_predictions.json     # Landmark detection results
-└── parameter_predictions.json    # Derived parameter results
+├── regression_predictions.json     # Regression results
 ```
 
 ---
@@ -224,75 +211,6 @@ where `p_k` is the predicted landmark and `g_k` is the ground truth landmark.
 
 ---
 
-## 🐳 Docker Build and Test
-
-### ⚠️ Important Reminder
-
-**Docker is the final submission method!** Please make sure to complete the following steps before submission:
-
-### Step 1: Prepare Docker Files
-
-Copy the following files to the `docker/` directory:
-
-```bash
-cd docker/
-# Required files:
-# - model.py (modified inference code)
-# - model_factory.py
-# - best_model.pth (trained model)
-# - requirements.txt
-# - Dockerfile
-```
-
-### Step 2: Build Docker Image
-
-```bash
-cd docker/
-./build.sh
-```
-
-Or build manually:
-
-```bash
-docker build -f Dockerfile -t gu-biometry-submission:latest .
-```
-
-### Step 3: Test on Validation Set
-
-```bash
-# Method 1: Use test script
-./run_test.sh /path/to/validation /path/to/output
-
-# Method 2: Manual run
-docker run --gpus all --rm \
-  -v /path/to/validation:/input/:ro \
-  -v /path/to/output:/output \
-  gu-biometry-submission:latest
-```
-
-### Step 4: Validate Output Format
-
-Check the output directory:
-
-```bash
-ls -lh /path/to/output/
-
-# Should contain:
-# - landmark_predictions.json
-# - parameter_predictions.json
-```
-
-### Step 5: Submit to CodaLab
-
-1. Package output files:
-   ```bash
-   cd /path/to/output
-   zip -r predictions.zip .
-   ```
-
-2. Log in to CodaLab platform
-3. Upload `predictions.zip` for validation set evaluation
-4. View evaluation results
 
 ---
 
@@ -335,7 +253,7 @@ class Model:
 [
   {
     "image_path": "relative/path/image_001.jpg",
-    "task_id": "FUGC",
+    "task_id": "id",
     "predicted_points_normalized": [0.3, 0.4, 0.6, 0.7],
     "predicted_points_pixels": [150, 200, 300, 350]
   },
@@ -346,32 +264,6 @@ class Model:
 **Description**:
 - `predicted_points_normalized`: Normalized landmark coordinates (x1, y1, x2, y2, ...) in range [0, 1]
 - `predicted_points_pixels`: Pixel coordinates (x1, y1, x2, y2, ...) in original image space
-
-##### 2) Parameter Predictions Output
-
-**Format**: JSON file
-
-**Path**: `{output_dir}/parameter_predictions.json`
-
-**Content**:
-```json
-[
-  {
-    "image_path": "relative/path/image_001.jpg",
-    "task_id": "prenatal_bpd",
-    "parameters": {
-      "BPD": 85.2,
-      "HC": 280.5,
-      "AC": 250.3
-    }
-  },
-  ...
-]
-```
-
-**Description**:
-- `parameters`: Dictionary of derived clinical parameters
-- Values in physical units (mm or degrees)
 
 ### 2. Multi-task Model Requirement
 
