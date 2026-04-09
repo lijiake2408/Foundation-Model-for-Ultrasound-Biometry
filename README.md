@@ -1,21 +1,10 @@
-# Foundation Model Challenge for Ultrasound Image Analysis (FMC_UIA) - Baseline Code
-Welcome to the Foundation Model Challenge for Ultrasound Image Analysis (FMC_UIA)! This repository provides baseline code to help you quickly get started with training, inference, and submission.
+# Generalization-oriented Ultrasound Biometry (GU_Biometry) - Baseline Code
 
-Get the train dataset through the following channels:
-
- Baiduyunpan: https://pan.baidu.com/s/12Ra7s-3R4zC5CTVV9N7Hzg?pwd=cjwu 
- 
- OneDrive: https://1drv.ms/u/c/cbab6c8ddcdb5d82/IQDtKN9FZ-98RrjXpkLmEioPAXHEvL3htBFyrIA9K1TVQRM?e=zAeVhL
- 
- GoogleDrive: https://drive.google.com/file/d/1SivTzkK6IVLH44S_2B5xSR00j96jkJ4-/view?usp=sharing
-
-New Dataset Task Released – Update Your Training Pipeline
-  Download: Please download the new dataset files from the following link: https://pan.baidu.com/s/1NNCZLkr8V0Txso669evXnw?pwd=1eqp Or https://drive.google.com/file/d/18oU6FraMa3ybs_XmQhDNrZESRorbGqaG/view?usp=sharing
-
-
+Welcome to the Generalization-oriented Ultrasound Biometry Challenge (GU_Biometry) at MICCAI 2026! This repository provides baseline code to help you quickly get started with training, inference, and submission.
 
 ## 📋 Table of Contents
 
+- [Competition Overview](#-competition-overview)
 - [Competition Tasks](#-competition-tasks)
 - [Quick Start](#-quick-start)
 - [Code Structure](#-code-structure)
@@ -27,23 +16,60 @@ New Dataset Task Released – Update Your Training Pipeline
 
 ---
 
-## 🎯 Competition Tasks
+## 🎯 Competition Overview
 
-This challenge includes **4 types of medical image analysis tasks** with a total of **27 subtasks**:
+Accurate and reliable quantification of ultrasound parameters is fundamental to disease diagnosis, longitudinal monitoring, and evidence-based clinical decision-making across prenatal, pediatric, and adult populations. However, current clinical practice still relies heavily on manual or semi-automated measurements, which remain time-consuming, operator-dependent, and prone to substantial inter- and intra-observer variability.
 
-| Task Type | Count | Description | Output Format |
-|-----------|-------|-------------|---------------|
-| **Segmentation** | 12 | Pixel-level classification | Image |
-| **Classification** | 9 | Image classification | JSON file |
-| **Detection** | 3 | Object localization | JSON file |
-| **Regression** | 3 | Keypoint localization | JSON file |
+GU_Biometry aims to establish the first large-scale, unified ultrasound biometry benchmark capable of automatically measuring more than 20 key ultrasound parameters spanning prenatal, intrapartum, and routine adult ultrasound.
+
+### Conference & Workshop
+
+- **Conference**: MICCAI 2026
+- **Workshops**: 
+  - International Workshop on Advances in Simplifying Medical Ultrasound (ASMUS)
+  - The 1st MICCAI Workshop on Medical World Models (MWM)
 
 ---
 
+## 🏆 Competition Tasks
+
+This challenge addresses **Landmark Detection for Ultrasound Parameter Measurement** across multiple clinical domains:
+
+| Task Domain | Image Count | Description | Key Parameters |
+|-------------|-------------|-------------|----------------|
+| **Intrapartum Ultrasound** | 36,000 | Labor progression assessment | Angle of Progression (AoP), Head-Symphysis Distance |
+| **Cardiac Ultrasound** | 16,000 | Pediatric & adult cardiac function | LV dimensions, Aortic diameter, etc. |
+| **Prenatal Ultrasound** | 14,000 | Fetal biometry & growth monitoring | BPD, HC, AC, FL, HL, Cervical Length |
+
+### Target Measurements
+
+**Maternal-Fetal Ultrasound Parameters:**
+- Biparietal Diameter (BPD)
+- Head Circumference (HC)
+- Abdominal Circumference (AC)
+- Femur Length (FL)
+- Humerus Length (HL)
+- Cervical Length
+
+**Labor Progression Ultrasound Parameters:**
+- Angle of Progression (AoP)
+- Head-Symphysis Distance
+
+**Pediatric and Adult Cardiac Ultrasound Parameters:**
+- Parasternal Long-Axis View: Aortic annulus, Ascending aorta, Left atrial diameter, RV wall thickness, Mitral annulus diameter, LV dimensions
+- Parasternal Short-Axis View: Main pulmonary artery, RV outflow tract, Pulmonary arteries, Coronary artery
+- Apical Four-Chamber View: Atrial/ventricular dimensions, Mitral/tricuspid annulus diameters
+
+---
 
 ## 🚀 Quick Start
 
 ### 1. Clone the Code
+
+```bash
+git clone https://github.com/your-repo/GU_Biometry.git
+cd GU_Biometry
+```
 
 ### 2. Prepare Data
 
@@ -51,25 +77,18 @@ Data directory structure:
 ```
 data/
 ├── train/
-│   ├── csv_files/              # CSV index files
-│   │   ├── task1.csv
-│   │   ├── task2.csv
-│   │   └── ...
-│   ├── Classification/         # Classification task images
-│   ├── Segmentation/          # Segmentation task images and masks
-│   │   ├── Two/               # 2-class segmentation
-│   │   ├── Three/             # 3-class segmentation
-│   │   ├── Four/              # 4-class segmentation
-│   │   └── Five/              # 5-class segmentation
-│   ├── Detection/             # Detection task images
-│   └── Regression/            # Regression task images
+│   ├── images/                 # Training images
+│   ├── landmarks/              # Landmark annotations (1,000 annotated)
+│   └── csv_files/              # CSV index files
 │
-└── val/                       # Validation set (same structure as above)
-    ├── csv_files/
-    ├── Classification/
-    ├── Segmentation/
-    ├── Detection/
-    └── Regression/
+├── val/                        # Validation set (1,000 images, fully annotated)
+│   ├── images/
+│   ├── landmarks/
+│   └── csv_files/
+│
+└── test/                       # Test set (5,000 images, hidden)
+    ├── images/
+    └── csv_files/
 ```
 
 ### 3. Train Model
@@ -79,14 +98,14 @@ python train.py
 ```
 
 Training will automatically:
-- Load data
-- Train multi-task model
+- Load data (60,000 images with 1,000 annotated)
+- Train multi-task landmark detection model
 - Save best model as `best_model.pth`
 
 ### 4. Local Inference
 
 ```bash
-python model.py 
+python model.py
 ```
 
 ---
@@ -96,20 +115,19 @@ python model.py
 ```
 baseline/
 ├── train.py                    # Training script
-├── model.py                    # ⭐ Core: Inference model
+├── model.py                    # Core: Inference model
 ├── model_factory.py            # Multi-task model factory
 ├── dataset.py                  # Dataset loader
 ├── utils.py                    # Utility functions
 ├── best_model.pth             # Trained model weights
-├── docker/                    # ⭐ Docker submission related
+├── docker/                    # Docker submission related
 │   ├── Dockerfile
 │   ├── model.py              # Docker version of inference code
 │   ├── model_factory.py
 │   ├── requirements.txt
 │   ├── build.sh              # Build script
 │   ├── run_test.sh           # Test script
-│   ├── README.md             # Docker detailed documentation
-│   └── QUICKSTART.md         # Quick guide
+│   └── README.md             # Docker detailed documentation
 └── README.md                  # This file
 ```
 
@@ -133,6 +151,14 @@ DATA_ROOT_PATH = '/path/to/train'
 MODEL_SAVE_PATH = 'best_model.pth'
 ```
 
+### Dataset Statistics
+
+| Split | Total Images | Annotated Images | Annotation Rate |
+|-------|--------------|------------------|-----------------|
+| Training | 60,000 | 1,000 | ~1.7% |
+| Validation | 1,000 | 1,000 | 100% |
+| Test | 5,000 | 5,000 | 100% |
+
 ### Training Output
 
 - **Model weights**: `best_model.pth`
@@ -142,7 +168,7 @@ MODEL_SAVE_PATH = 'best_model.pth'
 
 ## 🔮 Local Inference
 
-###  Using model.py
+### Using model.py
 
 Modify the paths in `model.py`:
 
@@ -166,24 +192,37 @@ python model.py
 
 ```
 predictions/
-├── classification_predictions.json     # Classification results
-├── detection_predictions.json          # Detection results
-├── regression_predictions.json         # Regression results
-└── Segmentation/                       # Segmentation results
-    ├── Two/
-    │   └── (Keep original directory structure)
-    ├── Three/
-    ├── Four/
-    └── Five/
+├── landmark_predictions.json     # Landmark detection results
+└── parameter_predictions.json    # Derived parameter results
 ```
-**Segmentation result path**: Must maintain the same relative path as the `mask_path` field in CSV
 
-Example:
-```
-mask_path in CSV: ../Segmentation/Two/dataset_name/MASKS/mask_001.png
+---
 
-Output path: {output_dir}/Segmentation/Two/dataset_name/MASKS/mask_001.png
+## 📊 Evaluation Metrics
+
+### Primary Metrics
+
+| Metric | Weight | Description |
+|--------|--------|-------------|
+| **Mean Radial Error (MRE)** | 50% | Average distance between predicted and ground truth landmarks |
+| **Parameter Error** | 50% | Absolute difference between predicted and manually measured parameters |
+
+### MRE Calculation
+
+For each case with K required landmarks:
 ```
+MRE = (1/K) * Σ ||p_k - g_k||_2
+```
+where `p_k` is the predicted landmark and `g_k` is the ground truth landmark.
+
+### Ranking Method
+
+- Final rankings use a ChallengeR-style rank-then-aggregate framework
+- Domain-balanced weighting across four data domains
+- Both overall and domain-stratified leaderboards are reported
+- Tie-breaking: priority given to method with lower normalized parameter error
+
+---
 
 ## 🐳 Docker Build and Test
 
@@ -215,12 +254,10 @@ cd docker/
 Or build manually:
 
 ```bash
-docker build -f Dockerfile -t my-submission:latest .
+docker build -f Dockerfile -t gu-biometry-submission:latest .
 ```
 
-### Step 3: Test on Validation Set ⭐
-
-**This step is very important!** Before submission, you must test the Docker on the validation set:
+### Step 3: Test on Validation Set
 
 ```bash
 # Method 1: Use test script
@@ -230,7 +267,7 @@ docker build -f Dockerfile -t my-submission:latest .
 docker run --gpus all --rm \
   -v /path/to/validation:/input/:ro \
   -v /path/to/output:/output \
-  my-submission:latest
+  gu-biometry-submission:latest
 ```
 
 ### Step 4: Validate Output Format
@@ -241,13 +278,11 @@ Check the output directory:
 ls -lh /path/to/output/
 
 # Should contain:
-# - classification_predictions.json
-# - detection_predictions.json
-# - regression_predictions.json
-# - Segmentation/ (directory)
+# - landmark_predictions.json
+# - parameter_predictions.json
 ```
 
-### Step 5: Upload to Codabench for Evaluation
+### Step 5: Submit to CodaLab
 
 1. Package output files:
    ```bash
@@ -255,39 +290,15 @@ ls -lh /path/to/output/
    zip -r predictions.zip .
    ```
 
-2. Log in to Codabench platform
+2. Log in to CodaLab platform
 3. Upload `predictions.zip` for validation set evaluation
 4. View evaluation results
-
-**If evaluation passes, it means Docker is built correctly!** You can proceed to the next step.
-
-### Step 6: Submit Docker Image
-
-#### Method A: Docker Hub (Recommended)
-
-```bash
-docker login
-docker tag my-submission:latest YOUR_USERNAME/my-submission:latest
-docker push YOUR_USERNAME/my-submission:latest
-
-# Send the image address to the organizing committee:
-# YOUR_USERNAME/my-submission:latest
-```
-
-#### Method B: Save as File
-
-```bash
-docker save -o my-submission.tar my-submission:latest
-
-# Upload my-submission.tar to cloud storage
-# Send the link to the organizing committee
-```
 
 ---
 
 ## ⚠️ Important Notes
 
-### 1. About model.py ⭐
+### 1. About model.py
 
 **`model.py` is the core file!** You can freely modify its internal implementation, but must follow these specifications:
 
@@ -311,113 +322,110 @@ class Model:
         pass
 ```
 
-#### Output Format Requirements 🔴 Important!
+#### Output Format Requirements
 
-##### 1) Segmentation Task Output
-
-**Format**: Image file
-
-**Path**: Must maintain the same relative path as the `mask_path` field in CSV
-
-Example:
-```
-mask_path in CSV: ../Segmentation/Two/dataset_name/MASKS/mask_001.png
-
-Output path: {output_dir}/Segmentation/Two/dataset_name/MASKS/mask_001.png
-```
-
-**Pixel values**: 
-- Background: 0
-- Class 1: 1
-- Class 2: 2
-- ...
-
-##### 2) Classification Task Output
+##### 1) Landmark Predictions Output
 
 **Format**: JSON file
 
-**Path**: `{output_dir}/classification_predictions.json`
+**Path**: `{output_dir}/landmark_predictions.json`
 
 **Content**:
 ```json
 [
   {
     "image_path": "relative/path/image_001.jpg",
-    "task_id": "breast_2cls",
-    "predicted_class": 1,
-    "predicted_probs": [0.15, 0.85]
+    "task_id": "prenatal_bpd",
+    "landmarks": [
+      {"id": 1, "x": 150.5, "y": 200.3},
+      {"id": 2, "x": 250.8, "y": 180.2}
+    ]
   },
   ...
 ]
 ```
 
 **Description**:
-- `predicted_class`: Predicted class label (integer)
-- `predicted_probs`: Prediction probabilities for each class (array, length equals number of classes)
-  - Used to calculate evaluation metrics that require probabilities like AUC
-  - Sum of all probability values should be 1.0
+- `landmarks`: Array of landmark coordinates
+- `id`: Landmark identifier
+- `x`, `y`: Pixel coordinates in original image space
 
-##### 3) Detection Task Output
+##### 2) Parameter Predictions Output
 
 **Format**: JSON file
 
-**Path**: `{output_dir}/detection_predictions.json`
+**Path**: `{output_dir}/parameter_predictions.json`
 
 **Content**:
 ```json
 [
   {
     "image_path": "relative/path/image_001.jpg",
-    "task_id": "thyroid_nodule_det",
-    "bbox_normalized": [0.1, 0.2, 0.5, 0.6],
-    "bbox_pixels": [50, 100, 250, 300]
+    "task_id": "prenatal_bpd",
+    "parameters": {
+      "BPD": 85.2,
+      "HC": 280.5,
+      "AC": 250.3
+    }
   },
   ...
 ]
 ```
 
 **Description**:
-- `bbox_normalized`: [x_min, y_min, x_max, y_max], normalized to [0, 1]
-- `bbox_pixels`: [x_min, y_min, x_max, y_max], pixel coordinates
+- `parameters`: Dictionary of derived clinical parameters
+- Values in physical units (mm or degrees)
 
-##### 4) Regression Task Output
+### 2. Multi-task Model Requirement
 
-**Format**: JSON file
+**IMPORTANT**: Participants are required to develop a **unified model** capable of handling all subgroups and imaging domains within the challenge. 
 
-**Path**: `{output_dir}/regression_predictions.json`
+- ❌ Subgroup-specific models are NOT permitted
+- ❌ Separate submissions for individual tasks are NOT permitted
+- ✅ Each team must submit a single integrated solution
 
-**Content**:
-```json
-[
-  {
-    "image_path": "relative/path/image_001.jpg",
-    "task_id": "FUGC",
-    "predicted_points_normalized": [0.3, 0.4, 0.6, 0.7],
-    "predicted_points_pixels": [150, 200, 300, 350]
-  },
-  ...
-]
-```
+### 3. Baseline Comparison Requirement
 
-**Description**:
-- `predicted_points_normalized`: [x1, y1, x2, y2, ...] (normalized coordinates)
-- `predicted_points_pixels`: [x1, y1, x2, y2, ...] (pixel coordinates)
+An official baseline model will be provided by the organizers. Submitted methods must demonstrate **performance improvements over this baseline** to be eligible for ranking and awards.
 
-### 2. Docker Environment Requirements
+### 4. Docker Environment Requirements
 
 - **Input mount point**: `/input/` (read-only)
 - **Output mount point**: `/output/` (writable)
 - **Memory limit**: Recommended not to exceed 16GB
 
+---
 
+## 📊 Data Sources
+
+### Imaging Devices
+
+- Philip-cx50
+- Toshiba Aplio300
+- Voluson P8
+- Esaote Mylab
+- Lian-med ObEye
+- Youkey Q7
+
+### Data Collection Centers
+
+- Cho Ray Hospital, Vietnam
+- Aga Khan University Hospital, Kenya
+- University of Barcelona, Spain
+- Zhenjiang Maternal and Child Health Hospital, China
+- Zhujiang Hospital, Southern Medical University, China
+- And 20+ additional centers worldwide
+
+---
 
 ## ❓ FAQ
 
 ### Q1: How to modify model architecture?
 
 **A**: You can freely modify the model structure in `model_factory.py`, but make sure:
-- Input: RGB images
-- Output: Format that meets each task's requirements
+- Input: Ultrasound images (various sizes)
+- Output: Landmark coordinates and derived parameters
+- The model must handle all clinical domains
 
 ### Q2: What if I run out of GPU memory during training?
 
@@ -427,43 +435,33 @@ Output path: {output_dir}/Segmentation/Two/dataset_name/MASKS/mask_001.png
 BATCH_SIZE = 4  # Change from 8 to 4
 ```
 
-### Q3: Docker build is very slow?
+### Q3: Can I use semi-supervised learning?
 
-**A**: 
-- First build needs to download base image (~6GB), which takes time
-- Subsequent builds will use cache and be faster
-- Ensure stable network connection
+**A**: Yes! The training set contains 55,000 unlabeled images specifically designed to support semi-supervised learning strategies. This reflects real-world clinical conditions where expert annotation is limited.
 
-### Q4: How to verify if output format is correct?
+### Q4: How to handle different imaging views?
 
-**A**: 
-1. Run Docker on validation set
-2. Upload output to Codabench platform
-3. Platform will automatically validate format and return evaluation results
-4. If format is incorrect, there will be clear error messages
+**A**: Each image is associated with a predefined landmark template specifying which landmarks are applicable. Not all clinical parameters apply to every image.
 
 ### Q5: Can I use my own pre-trained model?
 
-**A**: Yes!
-- Model weight files are included in the Docker image
+**A**: Yes! Model weight files are included in the Docker image. You can use foundation models or pre-trained weights.
 
-### Q6: Must the inference output path be strictly followed?
+### Q6: How to verify if output format is correct?
 
-**A**: **Yes!** Especially for segmentation task mask paths, they must be completely consistent with the `mask_path` field in CSV (removing the leading `../`). Otherwise, the evaluation platform cannot find the files.
+**A**: 
+1. Run Docker on validation set
+2. Upload output to CodaLab platform
+3. Platform will automatically validate format and return evaluation results
 
-### Q7: How to debug Docker internal issues?
+### Q7: What is the clinical significance of the metrics?
 
-**A**: Enter container for debugging:
-```bash
-docker run --gpus all --rm \
-  -v /path/to/data:/input/:ro \
-  -v /path/to/output:/output \
-  -it my-submission:latest /bin/bash
+**A**: 
+- MRE < 5mm is generally considered clinically acceptable for most ultrasound measurements
+- Parameter errors within 5-10% of expert measurements are considered good
+- These thresholds are based on inter-observer variability in clinical practice
 
-# Run manually inside container
-python model.py
-```
-
+---
 
 ## 📄 License
 
@@ -474,14 +472,25 @@ This baseline code is for competition use only.
 ## 🎉 Good Luck with the Competition!
 
 Remember the key steps:
-1. ✅ Train model
-2. ✅ Test inference locally
-3. ✅ Build Docker
-4. ✅ **Test Docker on validation set**
-5. ✅ **Upload predictions to Codabench for validation**
-6. ✅ Submit Docker image
+1. ✅ Download data (60,000 training images)
+2. ✅ Train unified multi-task model
+3. ✅ Test inference locally
+4. ✅ Build Docker
+5. ✅ **Test Docker on validation set**
+6. ✅ **Upload predictions to CodaLab for validation**
+7. ✅ Submit Docker image
 
-**Passing the Codabench evaluation on the validation set ensures your final submission is correct!**
+**Passing the CodaLab evaluation on the validation set ensures your final submission is correct!**
 
 Good luck! 🚀
 
+---
+
+## 📚 References
+
+1. Bai J, et al. Beyond Benchmarks of IUGC: Rethinking Requirements of Deep Learning Method for Intrapartum Ultrasound Biometry from Fetal Ultrasound Videos. Medical Image Analysis, 2026.
+2. Bai J, et al. IUGC: A Benchmark of Landmark Detection in End-to-End Intrapartum Ultrasound Biometry. Medical Image Analysis, 2026.
+3. Bai J, Zhou Z, Ou Z, et al. PSFHS challenge report: Pubic symphysis and fetal head segmentation from intrapartum ultrasound images. Medical Image Analysis, 2025.
+4. Deng, Bo, et al. "Baseline Method of the Foundation Model Challenge for Ultrasound Image Analysis." arXiv preprint arXiv:2602.01055 (2026).
+
+For more information, visit: [BIAS Initiative](https://www.dkfz.de/en/cami/research/topics/biasInitiative.html)
