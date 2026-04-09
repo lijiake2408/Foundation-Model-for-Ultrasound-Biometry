@@ -335,20 +335,17 @@ class Model:
 [
   {
     "image_path": "relative/path/image_001.jpg",
-    "task_id": "prenatal_bpd",
-    "landmarks": [
-      {"id": 1, "x": 150.5, "y": 200.3},
-      {"id": 2, "x": 250.8, "y": 180.2}
-    ]
+    "task_id": "FUGC",
+    "predicted_points_normalized": [0.3, 0.4, 0.6, 0.7],
+    "predicted_points_pixels": [150, 200, 300, 350]
   },
   ...
 ]
 ```
 
 **Description**:
-- `landmarks`: Array of landmark coordinates
-- `id`: Landmark identifier
-- `x`, `y`: Pixel coordinates in original image space
+- `predicted_points_normalized`: Normalized landmark coordinates (x1, y1, x2, y2, ...) in range [0, 1]
+- `predicted_points_pixels`: Pixel coordinates (x1, y1, x2, y2, ...) in original image space
 
 ##### 2) Parameter Predictions Output
 
