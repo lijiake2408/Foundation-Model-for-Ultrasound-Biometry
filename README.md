@@ -1,6 +1,6 @@
-# Foundation-Model-for-Ultrasound Biometry (GU_Biometry) - Baseline Code
+# Foundation-Model-for-Ultrasound Biometry - Baseline Code
 
-Welcome to the Generalization-oriented Ultrasound Biometry Challenge (GU_Biometry) at MICCAI 2026! This repository provides baseline code to help you quickly get started with training, inference, and submission.
+Welcome to the  Foundation-Model-for-Ultrasound Biometry Challenge at MICCAI 2026! This repository provides baseline code to help you quickly get started with training, inference, and submission.
 
 ## 📋 Table of Contents
 
