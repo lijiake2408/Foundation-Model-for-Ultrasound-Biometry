@@ -105,7 +105,7 @@ python train.py
 ```
 
 Training will automatically:
-- Load data (60,000 images with 1,000 annotated)
+- Load data (60,000 images with 5,000+ annotated)
 - Train multi-task landmark detection model
 - Save best model as `best_model.pth`
 
