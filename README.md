@@ -76,15 +76,26 @@ https://github.com/lijiake2408/Foundation-Model-for-Ultrasound-Biometry
 Data directory structure:
 ```
 data/
-├── train/
-│   ├── images/                 # Training images
-│   ├── landmarks/              # Landmark annotations (1,000 annotated)
-│   └── csv_files/              # CSV index files
-│
-├── val/                        # Validation set (1,000 images, fully annotated)
-│   ├── images/
-│   ├── landmarks/
-│   └── csv_files/
+├── csv/
+│   ├── A4C_train.csv
+│   ├── AOP_train.csv
+│   ├── FA_train.csv
+│   ├── FUGC_train.csv
+│   ├── HC_train.csv
+│   ├── IVC_train.csv
+│   ├── PLAX_train.csv
+│   ├── PSAX_train.csv
+│   └── Reg-Two_3.fetal_femur.csv
+└── images/
+    ├── A4C/
+    ├── AOP/
+    ├── FA/
+    ├── fetal_femur/
+    ├── FUGC/
+    ├── HC/
+    ├── IVC/
+    ├── PLAX/
+    └── PSAX/
 ```
 
 ### 3. Train Model
@@ -277,11 +288,6 @@ class Model:
 
 An official baseline model will be provided by the organizers. Submitted methods must demonstrate **performance improvements over this baseline** to be eligible for ranking and awards.
 
-### 4. Docker Environment Requirements
-
-- **Input mount point**: `/input/` (read-only)
-- **Output mount point**: `/output/` (writable)
-- **Memory limit**: Recommended not to exceed 16GB
 
 ---
 
@@ -321,12 +327,12 @@ An official baseline model will be provided by the organizers. Submitted methods
 **A**: Reduce the batch size:
 ```python
 # train.py
-BATCH_SIZE = 4  # Change from 8 to 4
+BATCH_SIZE = 4  # Change from 4 to 2
 ```
 
 ### Q3: Can I use semi-supervised learning?
 
-**A**: Yes! The training set contains 55,000 unlabeled images specifically designed to support semi-supervised learning strategies. This reflects real-world clinical conditions where expert annotation is limited.
+**A**: Yes! The training set contains 5,000 unlabeled images specifically designed to support semi-supervised learning strategies. This reflects real-world clinical conditions where expert annotation is limited.
 
 ### Q4: How to handle different imaging views?
 
