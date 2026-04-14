@@ -143,7 +143,7 @@ MODEL_SAVE_PATH = 'best_model.pth'
 
 | Split | Total Images | Annotated Images | Annotation Rate |
 |-------|--------------|------------------|-----------------|
-| Training | 60,000 | 1,000 | ~1.7% |
+| Training | 60,000 | 5,000 | ~8.3% |
 | Validation | 1,000 | 1,000 | 100% |
 | Test | 5,000 | 5,000 | 100% |
 
