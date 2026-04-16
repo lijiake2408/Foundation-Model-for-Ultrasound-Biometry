@@ -20,7 +20,7 @@ Welcome to the  Foundation-Model-for-Ultrasound Biometry Challenge at MICCAI 202
 
 Accurate and reliable quantification of ultrasound parameters is fundamental to disease diagnosis, longitudinal monitoring, and evidence-based clinical decision-making across prenatal, pediatric, and adult populations. However, current clinical practice still relies heavily on manual or semi-automated measurements, which remain time-consuming, operator-dependent, and prone to substantial inter- and intra-observer variability.
 
-GU_Biometry aims to establish the first large-scale, unified ultrasound biometry benchmark capable of automatically measuring more than 20 key ultrasound parameters spanning prenatal, intrapartum, and routine adult ultrasound.
+FU_Biometry aims to establish the first large-scale, unified ultrasound biometry benchmark capable of automatically measuring more than 20 key ultrasound parameters spanning prenatal, intrapartum, and routine adult ultrasound.
 
 ### Conference & Workshop
 
